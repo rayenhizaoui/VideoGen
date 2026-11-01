@@ -10,3 +10,4 @@ Ce dépôt contient les scripts d'automatisation et les workflows **ComfyUI** pr
 - `start_comfyui_rtx4060.bat` : Lanceur 1-clic avec optimisation VRAM (`--lowvram`).
 - `download_models.ps1` / `download_models.bat` : Téléchargement automatique des modèles (LTX-Video 2B et T5 XXL FP8).
 - `README_LTX_VIDEO.md` : Guide pas à pas détaillé pour la configuration et la génération.
+
