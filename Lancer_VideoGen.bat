@@ -12,3 +12,4 @@ echo.
 cd /d "%~dp0"
 .\ComfyUI_windows_portable\python_embeded\python.exe app.py
 pause
+

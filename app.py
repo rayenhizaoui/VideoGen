@@ -373,7 +373,7 @@ def generate_text_to_video(prompt, width, height, num_frames, steps, seed, progr
 
     output_path = download_output(files[0], OUTPUT_DIR)
     progress(1.0, desc="Termine !")
-    return str(output_path)
+    return str(output_path), str(output_path)
 
 
 def generate_image_to_video(image, prompt, width, height, num_frames, steps, seed,
@@ -419,7 +419,7 @@ def generate_image_to_video(image, prompt, width, height, num_frames, steps, see
 
     output_path = download_output(files[0], OUTPUT_DIR)
     progress(1.0, desc="Termine !")
-    return str(output_path)
+    return str(output_path), str(output_path)
 
 
 # ─── Interface Utilisateur ────────────────────────────────────────────────────
@@ -478,18 +478,14 @@ def create_app():
                         i2v_btn = gr.Button("🎬 Generer la Video", variant="primary", size="lg")
 
                     with gr.Column(scale=1):
-                        i2v_output = gr.Image(label="Video generee", height=400)
+                        i2v_output = gr.Image(label="Video generee", type="filepath", height=400)
                         i2v_download = gr.File(label="Telecharger")
 
                 i2v_btn.click(
                     fn=generate_image_to_video,
                     inputs=[i2v_image, i2v_prompt, i2v_width, i2v_height,
                             i2v_frames, i2v_steps, i2v_seed],
-                    outputs=[i2v_output],
-                ).then(
-                    fn=lambda x: x,
-                    inputs=[i2v_output],
-                    outputs=[i2v_download],
+                    outputs=[i2v_output, i2v_download],
                 )
 
             # ── Tab 2 : Texte → Video ─────────────────────────────────────
@@ -515,18 +511,14 @@ def create_app():
                         t2v_btn = gr.Button("🎬 Generer la Video", variant="primary", size="lg")
 
                     with gr.Column(scale=1):
-                        t2v_output = gr.Image(label="Video generee", height=400)
+                        t2v_output = gr.Image(label="Video generee", type="filepath", height=400)
                         t2v_download = gr.File(label="Telecharger")
 
                 t2v_btn.click(
                     fn=generate_text_to_video,
                     inputs=[t2v_prompt, t2v_width, t2v_height,
                             t2v_frames, t2v_steps, t2v_seed],
-                    outputs=[t2v_output],
-                ).then(
-                    fn=lambda x: x,
-                    inputs=[t2v_output],
-                    outputs=[t2v_download],
+                    outputs=[t2v_output, t2v_download],
                 )
 
         gr.Markdown(
