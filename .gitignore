@@ -1,0 +1,35 @@
+# ComfyUI Portable et Python embarque
+ComfyUI_windows_portable/
+python_embeded/
+env/
+venv/
+.venv/
+__pycache__/
+
+# Modeles et poids (plusieurs Go)
+*.safetensors
+*.gguf
+*.ckpt
+*.pt
+*.bin
+*.pth
+*.onnx
+
+# Sorties de generation et fichiers temporaires
+output/
+temp/
+input/
+models/
+
+# Archives
+*.7z
+*.zip
+*.tar.gz
+*.rar
+
+# Fichiers systeme et editeurs
+.DS_Store
+Thumbs.db
+*.log
+.vscode/
+.idea/
