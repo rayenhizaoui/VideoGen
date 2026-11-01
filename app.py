@@ -110,7 +110,21 @@ def queue_prompt(workflow: dict) -> tuple:
         f"{SERVER_URL}/prompt",
         json={"prompt": workflow, "client_id": client_id},
     )
-    r.raise_for_status()
+    if r.status_code != 200:
+        try:
+            err_data = r.json()
+            node_errors = err_data.get("node_errors", {})
+            if node_errors:
+                msg_list = []
+                for nid, nerr in node_errors.items():
+                    msg_list.append(f"Noeud {nid} ({nerr.get('class_type', '')}): {', '.join(nerr.get('errors', []))}")
+                raise RuntimeError("Erreur de validation: " + " | ".join(msg_list))
+            error_info = err_data.get("error", str(err_data))
+            raise RuntimeError(f"Erreur ComfyUI: {error_info}")
+        except Exception as e:
+            if isinstance(e, RuntimeError):
+                raise
+            r.raise_for_status()
     result = r.json()
     return result["prompt_id"], client_id
 
@@ -219,13 +233,13 @@ def build_t2v_workflow(prompt: str, width: int, height: int, num_frames: int,
         },
         "6": {
             "class_type": "LTXVConditioning",
-            "inputs": {"positive": ["3", 0], "negative": ["4", 0], "frame_rate": 25}
+            "inputs": {"positive": ["3", 0], "negative": ["4", 0], "frame_rate": 25.0}
         },
         "7": {
             "class_type": "LTXVScheduler",
             "inputs": {
                 "latent": ["5", 0], "steps": steps,
-                "shift": 2.05, "mu": 0.95, "reverse": True, "terminal": 0.1
+                "max_shift": 2.05, "base_shift": 0.95, "stretch": True, "terminal": 0.1
             }
         },
         "8": {
@@ -280,7 +294,7 @@ def build_i2v_workflow(image_name: str, prompt: str, width: int, height: int,
         },
         "6": {
             "class_type": "LTXVPreprocess",
-            "inputs": {"image": ["5", 0], "target_fps": 40}
+            "inputs": {"image": ["5", 0], "img_compression": 35}
         },
         "7": {
             "class_type": "LTXVImgToVideo",
@@ -288,17 +302,18 @@ def build_i2v_workflow(image_name: str, prompt: str, width: int, height: int,
                 "positive": ["3", 0], "negative": ["4", 0],
                 "vae": ["1", 2], "image": ["6", 0],
                 "width": width, "height": height, "length": num_frames, "batch_size": 1,
+                "strength": 1.0,
             }
         },
         "8": {
             "class_type": "LTXVConditioning",
-            "inputs": {"positive": ["7", 0], "negative": ["7", 1], "frame_rate": 25}
+            "inputs": {"positive": ["7", 0], "negative": ["7", 1], "frame_rate": 25.0}
         },
         "9": {
             "class_type": "LTXVScheduler",
             "inputs": {
                 "latent": ["7", 2], "steps": steps,
-                "shift": 2.05, "mu": 0.95, "reverse": True, "terminal": 0.1,
+                "max_shift": 2.05, "base_shift": 0.95, "stretch": True, "terminal": 0.1,
             }
         },
         "10": {
