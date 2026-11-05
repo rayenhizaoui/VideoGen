@@ -1,13 +1,36 @@
 # VideoGen
 
-Environnement local pour la génération de vidéos par IA sur PC (optimisé pour **NVIDIA RTX 4060 / 4060 Ti 8 GB VRAM**).
+Générateur de vidéos IA local sur PC (optimisé pour **NVIDIA GeForce RTX 4060 8 GB VRAM**).
 
-Ce dépôt contient les scripts d'automatisation et les workflows **ComfyUI** prêts à l'emploi pour le modèle **LTX-Video**.
+---
 
-## Contenu du dépôt
-- `ltxv_text_to_video.json` : Workflow ComfyUI pour le Text-to-Video.
-- `ltxv_image_to_video.json` : Workflow ComfyUI pour l'Image-to-Video.
-- `start_comfyui_rtx4060.bat` : Lanceur 1-clic avec optimisation VRAM (`--lowvram`).
-- `download_models.ps1` / `download_models.bat` : Téléchargement automatique des modèles (LTX-Video 2B et T5 XXL FP8).
-- `README_LTX_VIDEO.md` : Guide pas à pas détaillé pour la configuration et la génération.
+## 🚀 Modèles Disponibles
 
+| Modèle | Qualité | Vitesse sur RTX 4060 | Recommandation |
+| :--- | :---: | :---: | :--- |
+| **LTX-Video 2B** | Rapide (Brouillon / Tests) | **~30 à 45 secondes** | Idéal pour tester rapidement des prompts et concepts. |
+| **Wan 2.1 14B (GGUF)** | **Cinéma / Photoréaliste** | **~10 à 20 minutes** | Qualité maximale absolue (physique, anatomie, rendu pro). |
+
+---
+
+## 🛠️ Démarrage Rapide
+
+1. **Lancer l'application web simplifiée** :
+   Double-cliquez sur :
+   👉 `Lancer_VideoGen.bat`
+   L'interface s'ouvrira automatiquement sur `http://127.0.0.1:7860`.
+
+2. **Téléchargement des modèles** :
+   - Pour les modèles légers **LTX-Video** : double-cliquez sur `download_models.bat`
+   - Pour le grand modèle cinéma **Wan 2.1 14B GGUF** : double-cliquez sur `download_wan21_14b.bat`
+
+---
+
+## 📁 Structure du Projet
+
+- `Lancer_VideoGen.bat` : Lanceur 1-clic de l'application web.
+- `app.py` : Application web intuitive (Gradio + moteur ComfyUI backend).
+- `download_models.bat` / `download_models.ps1` : Téléchargeur LTX-Video.
+- `download_wan21_14b.bat` / `download_wan21_14b.ps1` : Téléchargeur Wan 2.1 14B GGUF.
+- `ComfyUI_windows_portable/` : Moteur d'inférence autonome avec PyTorch CUDA.
+- `output/` : Dossier où toutes vos vidéos générées sont automatiquement enregistrées.
